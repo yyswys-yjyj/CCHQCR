@@ -1,4 +1,6 @@
-# CCH Quick Code Runtime(CCHQCR)
+# CCH Quick Code Runtime (CCHQCR)
+
+> **简体中文** · [English](README.en.md)
 
 **CCHQCode** 是一种轻量级、嵌入式脚本语言，专为事件驱动的业务逻辑场景设计。  
 CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三版本实现，可直接嵌入到你的项目中。
