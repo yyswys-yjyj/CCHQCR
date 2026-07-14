@@ -1,7 +1,7 @@
-# CCHQCode Runtime
+# CCH Quick Code Runtime(CCHQCR)
 
 **CCHQCode** 是一种轻量级、嵌入式脚本语言，专为事件驱动的业务逻辑场景设计。  
-CCHQCode Runtime 提供了 PHP 和 TypeScript/JavaScript 双版本实现，可直接嵌入到你的项目中。
+CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三版本实现，可直接嵌入到你的项目中。
 
 ---
 
@@ -425,6 +425,49 @@ function createRuntime(context?: any): {
 
 ---
 
+## Python 接入
+
+### 安装
+
+Python 版本无需安装任何第三方依赖，标准库即可运行。
+
+### 快速使用
+
+```python
+from python import run_cchq, create_runtime
+
+# 方式一：一次性执行
+result = run_cchq("""
+  @Regfunc<>Param:$payload&{
+    @SetCallBackName("Main");
+    @ReturnToBot("Hello, " + $payload);
+  }
+  @LifeStart(@RunFunc(Main, $payload))
+""", {"payload": "World"})
+
+print(result)  # "Hello, World"
+
+
+# 方式二：创建可复用的 Runtime 实例
+rt = create_runtime({"payload": "test"})
+rt.register_control("Double", lambda x: x * 2)
+r1 = rt.execute("...")
+```
+
+### API 参考
+
+```python
+def run_cchq(script: str, context: dict = {}) -> Any
+
+def create_runtime(context: dict = {}) -> Runtime:
+    # Runtime 提供以下方法：
+    # - execute(script: str) -> Any
+    # - register_control(name: str, callable: Callable)
+    # - get_environment() -> Environment
+```
+
+---
+
 ## 完整示例
 
 ### 综合脚本
@@ -532,5 +575,14 @@ CCHQCR/
 │   ├── dist/              编译产物（零依赖）
 │   │   └── *.js
 │   └── tsconfig.json
-└── backup_.../            原始备份
+└── python/                ← Python 运行时
+    ├── __init__.py         入口
+    ├── types.py
+    ├── lexer.py
+    ├── parser.py
+    ├── ast.py
+    ├── environment.py
+    ├── builtins.py
+    ├── executor.py
+    └── test.py             23 项测试
 ```
