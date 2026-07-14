@@ -1,0 +1,60 @@
+import { Environment } from './environment';
+import { ControlSignal } from './types';
+
+/**
+ * 内置函数注册
+ */
+export function registerBuiltins(env: Environment): void {
+  // @GetEventInfo
+  env.registerControl('GetEventInfo', function(data: any, path?: string) {
+    // 特殊处理 @GetEventInfo(RunFunc, result)
+    if (data === 'RunFunc' && path === 'result') {
+      return env.getRunFuncResult();
+    }
+    // 特殊处理 @GetEventInfo(Param, ...)
+    if (data === 'Param') {
+      const param = env.getVariable('Param');
+      if (path === undefined) return param;
+      if (path === 'quantity') {
+        if (typeof param === 'object' && param !== null && 'quantity' in param) {
+          return param.quantity;
+        }
+        return 1; // 简单值的 Param 只有一个参数
+      }
+      if (typeof param === 'object' && param !== null && path in param) {
+        return param[path];
+      }
+      return param;
+    }
+    if (path === undefined) return data;
+    // 支持点路径
+    const parts = path.split('.');
+    let current = data;
+    for (const key of parts) {
+      if (typeof current === 'object' && current !== null && key in current) {
+        current = current[key];
+      } else {
+        return null;
+      }
+    }
+    return current;
+  });
+
+  // @ReturnToBot
+  env.registerControl('ReturnToBot', function(value: any) {
+    return new ControlSignal('return', value);
+  });
+
+  // @Log
+  env.registerControl('Log', function(message: any) {
+    // 在控制台输出
+    const msg = typeof message === 'object' ? JSON.stringify(message) : String(message);
+    console.log('[CCHQ]', msg);
+    return null;
+  });
+
+  // @SetCallBackName（运行时无需操作）
+  env.registerControl('SetCallBackName', function(_name: any) {
+    return null;
+  });
+}
