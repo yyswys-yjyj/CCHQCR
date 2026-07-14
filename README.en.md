@@ -2,6 +2,10 @@
 
 > [简体中文](README.md) · **English**
 
+<div align="center">
+  <img src="https://visitor.serveryyswys.top/cnt/CCHQCR" alt="Visitor Count" />
+</div>
+
 **CCHQCode** is a lightweight embedded scripting language designed for event-driven business logic scenarios.  
 CCHQCode Runtime provides **PHP**, **TypeScript/JavaScript**, and **Python** implementations — drop it directly into your project.
 
