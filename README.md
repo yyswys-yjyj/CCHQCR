@@ -1,6 +1,6 @@
 # CCH Quick Code Runtime (CCHQCR)
 
-> **简体中文** · [English](README.en.md)
+**简体中文** · [English](README.en.md)
 
 <div align="center">
   <img src="https://visitor.serveryyswys.top/cnt/CCHQCR" alt="Visitor Count" />
