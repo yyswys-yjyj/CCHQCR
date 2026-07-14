@@ -518,19 +518,18 @@ CCHQCR/
 │   ├── Builtins.php       内置函数
 │   ├── CCHQRuntime.php    入口类
 │   └── test.php           19 项测试
-├── tsjs/                  ← TypeScript/JS 运行时
-│   ├── src/               源码
-│   │   ├── index.ts        入口
-│   │   ├── types.ts
-│   │   ├── lexer.ts
-│   │   ├── parser.ts
-│   │   ├── ast.ts
-│   │   ├── environment.ts
-│   │   ├── builtins.ts
-│   │   ├── executor.ts
-│   │   └── test.ts         23 项测试
-│   ├── dist/              编译产物（零依赖）
-│   │   └── *.js
-│   └── tsconfig.json
-└── backup_.../            原始备份
+└── tsjs/                  ← TypeScript/JS 运行时
+    ├── src/               源码
+    │   ├── index.ts        入口
+    │   ├── types.ts
+    │   ├── lexer.ts
+    │   ├── parser.ts
+    │   ├── ast.ts
+    │   ├── environment.ts
+    │   ├── builtins.ts
+    │   ├── executor.ts
+    │   └── test.ts         23 项测试
+    ├── dist/              编译产物（零依赖）
+    │   └── *.js
+    └── tsconfig.json
 ```
