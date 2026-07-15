@@ -75,7 +75,7 @@ Functions are overloaded by argument count:
 | Control | Description |
 |---------|-------------|
 | `@SetCallBackName("name")` | Register function name |
-| `@GetEventInfo(data, path)` | Read nested data by dot-path |
+| `@GetEventInfo(data, path)` | Extractor — read data from source |
 | `@ReturnToBot(value)` | Return value |
 | `@Log(message)` | Print log |
 | `@RunFunc(name, ...args)` | Call function (recursive) |
@@ -83,8 +83,17 @@ Functions are overloaded by argument count:
 **Special @GetEventInfo usages:**
 
 ```cchq
-@GetEventInfo(Param, quantity)   // Get argument count
-@GetEventInfo(RunFunc, result)   // Get last @RunFunc result
+@GetEventInfo(Param, quantity)        // Get argument count
+@GetEventInfo(RunFunc, result)        // Get last @RunFunc result
+@GetEventInfo(JSON->"code", $source)  // Parse JSON string and extract by path
+```
+
+`JSON->"path"` is a JSON path indicator — treats the data source as a JSON string and extracts by path:
+
+```cchq
+@GetEventInfo(JSON->"name", $jsonStr)         // Extract "name" from JSON
+@GetEventInfo(JSON->"user.name", $jsonStr)    // Nested dot-path
+@GetEventInfo(JSON->"code", @GetEventInfo(RunFunc, result))  // Combined with RunFunc result
 ```
 
 ### Variables & Assignment
@@ -119,6 +128,7 @@ Loop variables (`$i`) are only valid inside the loop body.
 | Comparison | `==`, `!=`, `<`, `>`, `<=`, `>=` |
 | Logical | `&&`, `\|\|`, `!` |
 | Unary | `-` (negate), `!` (not) |
+| Path | `->` (JSON path indicator) |
 | Grouping | `(expr)` |
 
 ### Conditionals
@@ -142,7 +152,9 @@ for(1:10:2) { ... }                 // step = 2
 while(cond) { break; continue; }
 ```
 
-### Pattern Matching @pick
+### Pick Expression @pick
+
+`@pick` (short for "pick expression") extracts a value from `Param` and performs pattern matching.
 
 **Statement form (switch/case):**
 ```cchq
@@ -158,6 +170,15 @@ while(cond) { break; continue; }
 **Expression form (extract value):**
 ```cchq
 @EventRestart(@pick(Param:$a));
+```
+
+**Case shorthand (when return value is known):**
+```cchq
+@pick(Param:$status){
+    switch($status){
+        case "code":"xxx"     // equivalent to case "code":{ $result="xxx";break; }
+    }
+}
 ```
 
 ### Array Literals
@@ -188,17 +209,32 @@ while(cond) { break; continue; }
 
 ### Event Restart
 
-Restart the lifecycle with a new payload:
+Restart the current function body with a new argument:
 
 ```cchq
 @Regfunc<>Param:$payload&{
     @SetCallBackName("Handler");
     if($payload == "first") {
-        @EventRestart("second");
+        @EventRestart("second");   // restart current function with "second"
     }
     @ReturnToBot("done");
 }
 @LifeStart(@RunFunc(Handler, $payload))
+// Input "first":
+//   1. Handler("first")   → payload=="first" → @EventRestart("second")
+//   2. Handler("second")  → payload!="first" → @ReturnToBot("done")
+//   Returns "done"
+```
+
+**Combined with @pick:**
+
+```cchq
+@Regfunc<>Param:any&{
+    @SetCallBackName("AFunc");
+    if(1 == @GetEventInfo(Param, quantity)){
+        @EventRestart(@pick(Param:$a));  // pick $a from Param and restart function
+    }
+}
 ```
 
 ### Comments
