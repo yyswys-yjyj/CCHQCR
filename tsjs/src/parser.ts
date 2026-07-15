@@ -4,7 +4,7 @@ import {
   LiteralNode, VariableNode, AssignNode, CallNode,
   IfNode, ForNode, WhileNode, BreakNode, ContinueNode,
   PickNode, PickExprNode, MapLiteralNode,
-  LifeStartNode, RunFuncNode, EventRestartNode,
+  LifeStartNode, RunFuncNode, EventRestartNode, JsonPathNode,
   BinaryOpNode, UnaryOpNode
 } from './ast';
 
@@ -334,6 +334,15 @@ export class Parser {
     if (token.type === 'IDENTIFIER') {
       const value = token.value ?? '';
       this.next();
+      // 处理 JSON->"path" 表达式
+      if (value === 'JSON' && this.current().type === 'SYMBOL' && this.current().value === '->') {
+        this.next();
+        const pathTok = this.current();
+        if (pathTok.type !== 'STRING') throw new Error('Expected string after JSON->');
+        const path = pathTok.value ?? '';
+        this.next();
+        return new JsonPathNode(path);
+      }
       return new LiteralNode(value);
     }
 

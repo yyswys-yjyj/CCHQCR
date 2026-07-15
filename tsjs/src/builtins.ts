@@ -26,6 +26,28 @@ export function registerBuiltins(env: Environment): void {
       }
       return param;
     }
+    // JSON 路径模式: @GetEventInfo(JSON->"path", $source)
+    if (typeof data === 'object' && data !== null && data.__json_path__ === true) {
+      const jsonStr = path;
+      if (typeof jsonStr === 'string') {
+        try {
+          const parsed = JSON.parse(jsonStr);
+          if (typeof parsed === 'object' && parsed !== null) {
+            const parts = data.path.split('.');
+            let current = parsed;
+            for (const key of parts) {
+              if (typeof current === 'object' && current !== null && key in current) {
+                current = current[key];
+              } else {
+                return null;
+              }
+            }
+            return current;
+          }
+        } catch { return null; }
+      }
+      return null;
+    }
     if (path === undefined) return data;
     // 支持点路径
     const parts = path.split('.');

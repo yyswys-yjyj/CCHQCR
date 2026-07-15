@@ -309,6 +309,15 @@ export class RunFuncNode extends ExpressionNode {
   }
 }
 
+// ===== JSON 路径节点 JSON->"path" =====
+export class JsonPathNode extends ExpressionNode {
+  path: string;
+  constructor(path: string) { super(); this.path = path; }
+  execute(env: Environment): any {
+    return { __json_path__: true, path: this.path };
+  }
+}
+
 // ===== @EventRestart =====
 export class EventRestartNode extends ASTNode {
   newPayloadExpr: ASTNode;

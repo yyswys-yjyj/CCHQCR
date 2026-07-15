@@ -13,18 +13,37 @@ class Builtins {
             if ($data === 'Param') {
                 $param = $env->getVariable('Param');
                 if ($path === null) return $param;
-                // 参数数量：如果 Param 是简单值，返回 1
                 if ($path === 'quantity') {
                     if (is_array($param) && isset($param['quantity'])) {
                         return $param['quantity'];
                     }
-                    return 1; // 简单值的 Param 只有一个参数
+                    return 1;
                 }
-                // 从 Param 对象中获取属性
                 if (is_array($param) && isset($param[$path])) {
                     return $param[$path];
                 }
                 return $param;
+            }
+            // JSON 路径模式: @GetEventInfo(JSON->"path", $source)
+            // $data 是标记对象 { __json_path__: true, path: "xxx" }
+            if (is_array($data) && isset($data['__json_path__']) && $data['__json_path__'] === true) {
+                $jsonStr = $path;
+                if (is_string($jsonStr)) {
+                    $parsed = json_decode($jsonStr, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($parsed)) {
+                        $parts = explode('.', $data['path']);
+                        $current = $parsed;
+                        foreach ($parts as $key) {
+                            if (is_array($current) && isset($current[$key])) {
+                                $current = $current[$key];
+                            } else {
+                                return null;
+                            }
+                        }
+                        return $current;
+                    }
+                }
+                return null;
             }
             if ($path === null) return $data;
             // 支持点路径

@@ -353,6 +353,17 @@ class Parser {
         if ($token['type'] === 'IDENTIFIER') {
             $value = $token['value'];
             $this->next();
+            // 处理 JSON->"path" 表达式
+            if ($value === 'JSON' && $this->current()['type'] === 'SYMBOL' && $this->current()['value'] === '->') {
+                $this->next(); // 消费 ->
+                $pathToken = $this->current();
+                if ($pathToken['type'] !== 'STRING') {
+                    throw new Exception("Expected string after JSON->");
+                }
+                $path = $pathToken['value'];
+                $this->next();
+                return new JsonPathNode($path);
+            }
             return new LiteralNode($value);
         }
 

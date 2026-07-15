@@ -348,6 +348,18 @@ class MapLiteralNode extends ExpressionNode {
     }
 }
 
+// JSON 路径节点 JSON->"path"
+class JsonPathNode extends ExpressionNode {
+    public $path;
+    public function __construct($path) {
+        $this->path = $path;
+    }
+    public function execute($env) {
+        // 返回标记对象，供 @GetEventInfo 识别
+        return ['__json_path__' => true, 'path' => $this->path];
+    }
+}
+
 // @EventRestart 节点
 class EventRestartNode extends ASTNode {
     public $newPayloadExpr;

@@ -325,6 +325,17 @@ class RunFuncNode(ExpressionNode):
         return result
 
 
+# ===== JsonPathNode =====
+class JsonPathNode(ExpressionNode):
+    """JSON 路径节点 JSON->'path'"""
+    def __init__(self, path: str):
+        super().__init__()
+        self.path = path
+
+    def execute(self, env):
+        return {'__json_path__': True, 'path': self.path}
+
+
 # ===== @EventRestart =====
 class EventRestartNode(ASTNode):
     def __init__(self, expr: ASTNode):

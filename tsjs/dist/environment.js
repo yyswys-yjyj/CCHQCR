@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Environment = void 0;
+const types_1 = require("./types");
 /**
  * 运行时环境 - 管理作用域、变量、函数表、控件表
  */
@@ -87,9 +88,18 @@ class Environment {
             for (let idx = 0; idx < params.length; idx++) {
                 this.setVariable(params[idx], args[idx] ?? null);
             }
-            const result = def.body.execute(this);
-            this.popScope();
-            return result;
+            try {
+                const result = def.body.execute(this);
+                this.popScope();
+                return result;
+            }
+            catch (err) {
+                if (err instanceof types_1.EventRestartSignal) {
+                    this.popScope();
+                    return this.callFunction(name, [err.newPayload]);
+                }
+                throw err;
+            }
         }
         else if (typeof def === 'function') {
             return def(...args);

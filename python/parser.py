@@ -8,7 +8,7 @@ from .ast import (
     LiteralNode, VariableNode, AssignNode, CallNode,
     IfNode, ForNode, WhileNode, BreakNode, ContinueNode,
     PickNode, PickExprNode, MapLiteralNode,
-    LifeStartNode, RunFuncNode, EventRestartNode,
+    LifeStartNode, RunFuncNode, EventRestartNode, JsonPathNode,
     BinaryOpNode, UnaryOpNode,
 )
 
@@ -325,6 +325,15 @@ class Parser:
         if tok.type == 'IDENTIFIER':
             value = tok.value
             self.next()
+            # 处理 JSON->"path" 表达式
+            if value == 'JSON' and self.current().type == 'SYMBOL' and self.current().value == '->':
+                self.next()
+                path_tok = self.current()
+                if path_tok.type != 'STRING':
+                    raise SyntaxError("Expected string after JSON->")
+                path = path_tok.value
+                self.next()
+                return JsonPathNode(path)
             return LiteralNode(value)
 
         # CONTROL 调用

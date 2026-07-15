@@ -11,22 +11,18 @@ class Executor {
     }
 
     public function run() {
-        while (true) {
-            try {
-                // 先注册所有函数（ProgramNode已做）
-                // 执行程序
-                $result = $this->program->execute($this->environment);
-                // 如果结果是控制信号，提取返回值（如果 return）
-                if ($result instanceof ControlSignal && $result->type === 'return') {
-                    return $result->value;
-                }
-                return $result;
-            } catch (EventRestartException $e) {
-                // 重启：更新上下文，重置作用域，继续循环重新执行
-                $this->environment->setContext($e->newPayload);
-                $this->environment->resetScopes();
-                // 继续循环，重新执行
+        try {
+            // 先注册所有函数（ProgramNode已做）
+            // 执行程序
+            $result = $this->program->execute($this->environment);
+            // 如果结果是控制信号，提取返回值（如果 return）
+            if ($result instanceof ControlSignal && $result->type === 'return') {
+                return $result->value;
             }
+            return $result;
+        } catch (EventRestartException $e) {
+            // @EventRestart 在函数体内被捕获处理，不应传播到此处
+            throw $e;
         }
     }
 }

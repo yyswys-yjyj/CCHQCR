@@ -89,9 +89,15 @@ class Environment {
             foreach ($def->params as $idx => $paramName) {
                 $this->setVariable($paramName, $args[$idx] ?? null);
             }
-            $result = $def->body->execute($this);
-            $this->popScope();
-            return $result;
+            try {
+                $result = $def->body->execute($this);
+                $this->popScope();
+                return $result;
+            } catch (EventRestartException $e) {
+                // @EventRestart: 重启当前函数，用新参数重新调用
+                $this->popScope();
+                return $this->callFunction($name, [$e->newPayload]);
+            }
         } elseif (is_callable($def)) {
             return call_user_func_array($def, $args);
         }

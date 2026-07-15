@@ -2,7 +2,7 @@
 
 from typing import Any, List, Optional
 
-from .types import ControlSignal
+from .types import ControlSignal, EventRestartSignal
 
 TYPE_KEYWORDS = {
     'any', 'bool', 'string', 'int', 'number',
@@ -82,9 +82,13 @@ class Environment:
             for idx, pname in enumerate(params):
                 self.set_variable(pname, args[idx] if idx < len(args) else None)
 
-            result = def_.body.execute(self)
-            self.pop_scope()
-            return result
+            try:
+                result = def_.body.execute(self)
+                self.pop_scope()
+                return result
+            except EventRestartSignal as e:
+                self.pop_scope()
+                return self.call_function(name, [e.new_payload])
         elif callable(def_):
             return def_(*args)
 

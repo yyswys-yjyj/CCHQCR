@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EventRestartNode = exports.RunFuncNode = exports.LifeStartNode = exports.MapLiteralNode = exports.PickExprNode = exports.PickNode = exports.ContinueNode = exports.BreakNode = exports.WhileNode = exports.ForNode = exports.IfNode = exports.CallNode = exports.BinaryOpNode = exports.AssignNode = exports.VariableNode = exports.UnaryOpNode = exports.LiteralNode = exports.BlockNode = exports.FunctionDefNode = exports.ProgramNode = exports.ExpressionNode = exports.ASTNode = void 0;
+exports.EventRestartNode = exports.JsonPathNode = exports.RunFuncNode = exports.LifeStartNode = exports.MapLiteralNode = exports.PickExprNode = exports.PickNode = exports.ContinueNode = exports.BreakNode = exports.WhileNode = exports.ForNode = exports.IfNode = exports.CallNode = exports.BinaryOpNode = exports.AssignNode = exports.VariableNode = exports.UnaryOpNode = exports.LiteralNode = exports.BlockNode = exports.FunctionDefNode = exports.ProgramNode = exports.ExpressionNode = exports.ASTNode = void 0;
 const types_1 = require("./types");
 // ===== 基类 =====
 class ASTNode {
@@ -322,6 +322,14 @@ class RunFuncNode extends ExpressionNode {
     }
 }
 exports.RunFuncNode = RunFuncNode;
+// ===== JSON 路径节点 JSON->"path" =====
+class JsonPathNode extends ExpressionNode {
+    constructor(path) { super(); this.path = path; }
+    execute(env) {
+        return { __json_path__: true, path: this.path };
+    }
+}
+exports.JsonPathNode = JsonPathNode;
 // ===== @EventRestart =====
 class EventRestartNode extends ASTNode {
     constructor(expr) { super(); this.newPayloadExpr = expr; }

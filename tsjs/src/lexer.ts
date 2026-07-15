@@ -177,6 +177,14 @@ export class Lexer {
         continue;
       }
 
+      // -> 复合符号（JSON 路径指示器）
+      if (ch === '-' && this.pos + 1 < this.length && this.source[this.pos + 1] === '>') {
+        this.pos += 2;
+        tokens.push({ type: 'SYMBOL', value: '->', line: this.line, col: this.col });
+        this.col += 2;
+        continue;
+      }
+
       // 其他单个符号
       if ('{}();,:[]=+-*/%'.includes(ch)) {
         tokens.push({ type: 'SYMBOL', value: ch, line: this.line, col: this.col });

@@ -23,6 +23,25 @@ def register_builtins(env):
             if isinstance(param, dict) and path in param:
                 return param[path]
             return param
+        # JSON 路径模式: @GetEventInfo(JSON->"path", $source)
+        if isinstance(data, dict) and data.get('__json_path__') is True:
+            json_str = path
+            if isinstance(json_str, str):
+                import json
+                try:
+                    parsed = json.loads(json_str)
+                    if isinstance(parsed, dict):
+                        parts = data['path'].split('.')
+                        current = parsed
+                        for key in parts:
+                            if isinstance(current, dict) and key in current:
+                                current = current[key]
+                            else:
+                                return None
+                        return current
+                except json.JSONDecodeError:
+                    return None
+            return None
         if path is None:
             return data
         # 点路径
