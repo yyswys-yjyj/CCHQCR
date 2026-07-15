@@ -7,7 +7,7 @@
     result = run_cchq('''
         @Regfunc<>Param:$payload&{
             @SetCallBackName("Main");
-            @ReturnToBot("Hello");
+            @ReturnBack("Hello");
         }
         @LifeStart(@RunFunc(Main, $payload))
     ''', {"payload": "World"})

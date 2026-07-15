@@ -59,8 +59,8 @@ class Builtins {
             return $current;
         });
 
-        // 注册控件 @ReturnToBot
-        $env->registerControl('ReturnToBot', function($value) {
+        // 注册控件 @ReturnBack
+        $env->registerControl('ReturnBack', function($value) {
             // 返回控制信号
             return new ControlSignal('return', $value);
         });

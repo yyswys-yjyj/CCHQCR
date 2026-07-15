@@ -28,7 +28,7 @@ echo "▶ 测试1: 基本函数定义与调用\n";
 $script1 = <<<'CCHQ'
 @Regfunc<>Param:$payload&{
     @SetCallBackName("HelloFunc");
-    @ReturnToBot("Hello, CCHQ!");
+    @ReturnBack("Hello, CCHQ!");
 }
 @LifeStart(@RunFunc(HelloFunc, "x"))
 CCHQ;
@@ -53,7 +53,7 @@ $script2 = <<<'CCHQ'
     $product = $a * $b;
     $quotient = $b / $a;
     $mod = $b % 3;
-    @ReturnToBot($sum);
+    @ReturnBack($sum);
 }
 @LifeStart(@RunFunc(CalcFunc, "x"))
 CCHQ;
@@ -73,9 +73,9 @@ $script3 = <<<'CCHQ'
     @SetCallBackName("JudgeFunc");
     $age = @GetEventInfo($payload, "age");
     if($age >= 18) {
-        @ReturnToBot("adult");
+        @ReturnBack("adult");
     } else {
-        @ReturnToBot("minor");
+        @ReturnBack("minor");
     }
 }
 @LifeStart(@RunFunc(JudgeFunc, $payload))
@@ -102,7 +102,7 @@ $script4 = <<<'CCHQ'
     for(1:10) {
         $sum = $sum + $i;
     }
-    @ReturnToBot($sum);
+    @ReturnBack($sum);
 }
 @LifeStart(@RunFunc(SumFunc, "x"))
 CCHQ;
@@ -124,7 +124,7 @@ $script5 = <<<'CCHQ'
     while($count < 5) {
         $count = $count + 1;
     }
-    @ReturnToBot($count);
+    @ReturnBack($count);
 }
 @LifeStart(@RunFunc(WhileFunc, "x"))
 CCHQ;
@@ -158,7 +158,7 @@ $script6 = <<<'CCHQ'
             }
         }
     }
-    @ReturnToBot($result);
+    @ReturnBack($result);
 }
 @LifeStart(@RunFunc(PickFunc, "b"))
 CCHQ;
@@ -176,7 +176,7 @@ echo "▶ 测试7: 数组字面量返回\n";
 $script7 = <<<'CCHQ'
 @Regfunc<>Param:$payload&{
     @SetCallBackName("ArrayFunc");
-    @ReturnToBot([
+    @ReturnBack([
         "name" => "张三",
         "age" => 25,
         "active" => true
@@ -203,9 +203,9 @@ $script8 = <<<'CCHQ'
     $isAdult = ($age >= 18) && ($age < 65);
     $isSenior = $age >= 65;
     if($isAdult && !$isSenior) {
-        @ReturnToBot("working_age");
+        @ReturnBack("working_age");
     } else {
-        @ReturnToBot("other");
+        @ReturnBack("other");
     }
 }
 @LifeStart(@RunFunc(LogicFunc, $payload))
@@ -226,7 +226,7 @@ $script9 = <<<'CCHQ'
     @SetCallBackName("NestFunc");
     $name = @GetEventInfo($payload, "user.name");
     $city = @GetEventInfo($payload, "user.address.city");
-    @ReturnToBot($name);
+    @ReturnBack($name);
 }
 @LifeStart(@RunFunc(NestFunc, $payload))
 CCHQ;
@@ -246,7 +246,7 @@ echo "▶ 测试10: @GetEventInfo(Param, quantity)\n";
 $script10 = <<<'CCHQ'
 @Regfunc<>Param:any&{
     @SetCallBackName("ParamInfoFunc");
-    @ReturnToBot(@GetEventInfo(Param, quantity));
+    @ReturnBack(@GetEventInfo(Param, quantity));
 }
 @LifeStart(@RunFunc(ParamInfoFunc, "hello"))
 CCHQ;
@@ -265,9 +265,9 @@ $script11 = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("FactFunc");
     if($x > 1) {
-        @ReturnToBot($x * @RunFunc(FactFunc, $x - 1));
+        @ReturnBack($x * @RunFunc(FactFunc, $x - 1));
     }
-    @ReturnToBot(1);
+    @ReturnBack(1);
 }
 @LifeStart(@RunFunc(FactFunc, 5))
 CCHQ;
@@ -288,7 +288,7 @@ $script12 = <<<'CCHQ'
     if($payload == "first") {
         @EventRestart("second");
     }
-    @ReturnToBot("done");
+    @ReturnBack("done");
 }
 @LifeStart(@RunFunc(RestartFunc, $payload))
 CCHQ;
@@ -323,7 +323,7 @@ $script13 = <<<'CCHQ'
     
     $firstTag = @GetEventInfo($tags, "0");
     
-    @ReturnToBot([
+    @ReturnBack([
         "name" => $name,
         "age" => $age,
         "status" => $status,
@@ -356,7 +356,7 @@ $script14 = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("BadFunc");
     @SetCallBackName("BadFunc2");
-    @ReturnToBot("err");
+    @ReturnBack("err");
 }
 @LifeStart(@RunFunc(BadFunc, "x"))
 CCHQ;
@@ -373,7 +373,7 @@ echo "▶ 测试15: 值列表格式数组\n";
 $script15 = <<<'CCHQ'
 @Regfunc<>Param:$payload&{
     @SetCallBackName("ListFunc");
-    @ReturnToBot(["a", "b", "c"]);
+    @ReturnBack(["a", "b", "c"]);
 }
 @LifeStart(@RunFunc(ListFunc, "x"))
 CCHQ;
@@ -395,7 +395,7 @@ $script16 = <<<'CCHQ'
     if($counter > 0) {
         @EventRestart($counter - 1);
     }
-    @ReturnToBot("zero");
+    @ReturnBack("zero");
 }
 @LifeStart(@RunFunc(CounterFunc, $payload))
 CCHQ;
@@ -413,14 +413,14 @@ echo "▶ 测试17: 布尔字面量 true/false\n";
 $script17a = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("BoolTrue");
-    @ReturnToBot(true);
+    @ReturnBack(true);
 }
 @LifeStart(@RunFunc(BoolTrue, "x"))
 CCHQ;
 $script17b = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("BoolFalse");
-    @ReturnToBot(false);
+    @ReturnBack(false);
 }
 @LifeStart(@RunFunc(BoolFalse, "x"))
 CCHQ;
@@ -440,16 +440,16 @@ echo "▶ 测试18: 非0=true, 0=false 条件\n";
 $script18a = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("Cond5");
-    if(5) { @ReturnToBot(true); }
-    @ReturnToBot(false);
+    if(5) { @ReturnBack(true); }
+    @ReturnBack(false);
 }
 @LifeStart(@RunFunc(Cond5, "x"))
 CCHQ;
 $script18b = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("Cond0");
-    if(0) { @ReturnToBot(true); }
-    @ReturnToBot(false);
+    if(0) { @ReturnBack(true); }
+    @ReturnBack(false);
 }
 @LifeStart(@RunFunc(Cond0, "x"))
 CCHQ;
@@ -469,14 +469,14 @@ echo "▶ 测试19: ! 运算符对数字的布尔转换\n";
 $script19a = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("Not0");
-    @ReturnToBot(!0);
+    @ReturnBack(!0);
 }
 @LifeStart(@RunFunc(Not0, "x"))
 CCHQ;
 $script19b = <<<'CCHQ'
 @Regfunc<>Param:$x&{
     @SetCallBackName("Not5");
-    @ReturnToBot(!5);
+    @ReturnBack(!5);
 }
 @LifeStart(@RunFunc(Not5, "x"))
 CCHQ;

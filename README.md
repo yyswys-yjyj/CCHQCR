@@ -40,7 +40,7 @@ CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三�
 @Regfunc<>Param:$payload&{
     @SetCallBackName("Main");
     $name = @GetEventInfo($payload, "name");
-    @ReturnToBot("你好, " + $name);
+    @ReturnBack("你好, " + $name);
 }
 
 @LifeStart(@RunFunc(Main, $payload))
@@ -115,7 +115,7 @@ CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三�
 |------|------|
 | `@SetCallBackName("name")` | 注册函数名称 |
 | `@GetEventInfo(data, path)` | 提取事件器——从 data 中读取数据 |
-| `@ReturnToBot(value)` | 返回值 |
+| `@ReturnBack(value)` | 返回值 |
 | `@Log(message)` | 输出日志 |
 | `@RunFunc(name, ...args)` | 调用函数（支持递归） |
 
@@ -276,7 +276,7 @@ while(条件) {
 **键值对格式：**
 
 ```cchq
-@ReturnToBot([
+@ReturnBack([
     "name" => "张三",
     "age" => 25,
     "active" => true
@@ -286,14 +286,14 @@ while(条件) {
 **值列表格式（自动分配数字索引）：**
 
 ```cchq
-@ReturnToBot(["a", "b", "c"]);
+@ReturnBack(["a", "b", "c"]);
 // 结果: { "0": "a", "1": "b", "2": "c" }
 ```
 
 **空数组：**
 
 ```cchq
-@ReturnToBot([]);
+@ReturnBack([]);
 ```
 
 ---
@@ -308,9 +308,9 @@ $result = @RunFunc(函数名, 参数1, 参数2);
 @Regfunc<>Param:$x&{
     @SetCallBackName("Fact");
     if($x > 1) {
-        @ReturnToBot($x * @RunFunc(Fact, $x - 1));
+        @ReturnBack($x * @RunFunc(Fact, $x - 1));
     }
-    @ReturnToBot(1);
+    @ReturnBack(1);
 }
 
 @LifeStart(@RunFunc(Fact, 5))   // 结果: 120
@@ -334,13 +334,13 @@ $result = @RunFunc(函数名, 参数1, 参数2);
     if($payload == "first") {
         @EventRestart("second");   // 用 "second" 重启当前函数
     }
-    @ReturnToBot("done");
+    @ReturnBack("done");
 }
 
 @LifeStart(@RunFunc(Handler, $payload))
 // 传入 "first"：
 //   1. Handler("first")   → payload=="first" → @EventRestart("second")
-//   2. Handler("second")  → payload!="first" → @ReturnToBot("done")
+//   2. Handler("second")  → payload!="first" → @ReturnBack("done")
 //   最终返回 "done"
 ```
 
@@ -377,7 +377,7 @@ $script = <<<'CCHQ'
 @Regfunc<>Param:$payload&{
     @SetCallBackName("Main");
     $name = @GetEventInfo($payload, "name");
-    @ReturnToBot("Hello, " + $name);
+    @ReturnBack("Hello, " + $name);
 }
 @LifeStart(@RunFunc(Main, $payload))
 CCHQ;
@@ -416,7 +416,7 @@ const { runCCHQ, createRuntime } = require('./tsjs/dist/index');
 const result = runCCHQ(`
   @Regfunc<>Param:$payload&{
     @SetCallBackName("Main");
-    @ReturnToBot("Hello, " + $payload);
+    @ReturnBack("Hello, " + $payload);
   }
   @LifeStart(@RunFunc(Main, $payload))
 `, { payload: "World" });
@@ -439,7 +439,7 @@ import { runCCHQ, createRuntime } from './tsjs/src/index';
 
 // 直接传入源码字符串，零依赖执行
 const result = runCCHQ(`
-  @Regfunc<>Param:$x&{@SetCallBackName("F");if($x>1){@ReturnToBot($x*@RunFunc(F,$x-1));}@ReturnToBot(1);}
+  @Regfunc<>Param:$x&{@SetCallBackName("F");if($x>1){@ReturnBack($x*@RunFunc(F,$x-1));}@ReturnBack(1);}
   @LifeStart(@RunFunc(F,5))
 `, {});
 console.log(result); // 120
@@ -482,7 +482,7 @@ from python import run_cchq, create_runtime
 result = run_cchq("""
   @Regfunc<>Param:$payload&{
     @SetCallBackName("Main");
-    @ReturnToBot("Hello, " + $payload);
+    @ReturnBack("Hello, " + $payload);
   }
   @LifeStart(@RunFunc(Main, $payload))
 """, {"payload": "World"})
@@ -557,7 +557,7 @@ def create_runtime(context: dict = {}) -> Runtime:
     }
 
     // 返回数组
-    @ReturnToBot([
+    @ReturnBack([
         "name"   => $name,
         "age"    => $age,
         "status" => $status,

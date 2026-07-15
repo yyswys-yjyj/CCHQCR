@@ -56,10 +56,10 @@ def register_builtins(env):
 
     env.register_control('GetEventInfo', get_event_info)
 
-    # @ReturnToBot
-    def return_to_bot(value):
+    # @ReturnBack
+    def return_back(value):
         return ControlSignal('return', value)
-    env.register_control('ReturnToBot', return_to_bot)
+    env.register_control('ReturnBack', return_back)
 
     # @Log
     def log(message):

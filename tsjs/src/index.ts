@@ -21,7 +21,7 @@ import { registerBuiltins } from './builtins';
  * const result = runCCHQ(
  *   `@Regfunc<>Param:$payload&{
  *      @SetCallBackName("Main");
- *      @ReturnToBot("Hello, " + $payload);
+ *      @ReturnBack("Hello, " + $payload);
  *    }
  *    @LifeStart(@RunFunc(Main, $payload))`,
  *   { payload: "World" }

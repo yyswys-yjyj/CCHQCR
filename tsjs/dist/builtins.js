@@ -69,8 +69,8 @@ function registerBuiltins(env) {
         }
         return current;
     });
-    // @ReturnToBot
-    env.registerControl('ReturnToBot', function (value) {
+    // @ReturnBack
+    env.registerControl('ReturnBack', function (value) {
         return new types_1.ControlSignal('return', value);
     });
     // @Log

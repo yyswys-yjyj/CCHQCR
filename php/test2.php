@@ -9,7 +9,7 @@ require_once "Builtins.php";
 echo "=== 测试1: GetEventInfo(Param,quantity) ===\n";
 $script1 = '@Regfunc<>Param:any&{
     @SetCallBackName("EchoFunc");
-    @ReturnToBot(@GetEventInfo(Param, quantity));
+    @ReturnBack(@GetEventInfo(Param, quantity));
 }
 @LifeStart(@RunFunc(EchoFunc, "hello"))';
 
@@ -37,7 +37,7 @@ $script2 = '@Regfunc<>Param:$payload&{
         @Log("第一次调用, 重启...");
         @EventRestart("second");
     }
-    @ReturnToBot("ok");
+    @ReturnBack("ok");
 }
 @LifeStart(@RunFunc(RestartDemo, "first"))';
 
@@ -61,9 +61,9 @@ echo "=== 测试3: @RunFunc 递归 + @GetEventInfo(RunFunc, result) ===\n";
 $script3 = '@Regfunc<>Param:$x&{
     @SetCallBackName("FactFunc");
     if($x > 1) {
-        @ReturnToBot($x * @RunFunc(FactFunc, $x - 1));
+        @ReturnBack($x * @RunFunc(FactFunc, $x - 1));
     }
-    @ReturnToBot(1);
+    @ReturnBack(1);
 }
 @LifeStart(@RunFunc(FactFunc, 5))';
 
@@ -84,7 +84,7 @@ try {
 echo "=== 测试4: @pick 表达式形式 ===\n";
 $script4 = '@Regfunc<>Param:$data&{
     @SetCallBackName("PickTest");
-    @ReturnToBot(@GetEventInfo(Param, quantity));
+    @ReturnBack(@GetEventInfo(Param, quantity));
 }
 @LifeStart(@RunFunc(PickTest, "test"))';
 
@@ -120,7 +120,7 @@ $script5 = '@Regfunc<>Param:$val&{
             }
         }
     }
-    @ReturnToBot($val);
+    @ReturnBack($val);
 }
 @LifeStart(@RunFunc(SwitchTest, "b"))';
 
@@ -143,7 +143,7 @@ echo "=== 测试6: 动态 @Regfunc + 签名 ===\n";
 $script6 = '@Regfunc<>Param:$a&{
     @SetCallBackName("MultiFunc");
     @Log("被调用");
-    @ReturnToBot($a);
+    @ReturnBack($a);
 }
 @LifeStart(@RunFunc(MultiFunc, "hello"))';
 
@@ -176,7 +176,7 @@ $script7 = '@Regfunc<>Param:$payload&{
     for(1:$age) {
         $sum = $sum + $i;
     }
-    @ReturnToBot([
+    @ReturnBack([
         "name" => $name,
         "age" => $age,
         "status" => $status,

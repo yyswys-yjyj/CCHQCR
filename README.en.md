@@ -17,7 +17,7 @@ CCHQCode Runtime provides **PHP**, **TypeScript/JavaScript**, and **Python** imp
 @Regfunc<>Param:$payload&{
     @SetCallBackName("Main");
     $name = @GetEventInfo($payload, "name");
-    @ReturnToBot("Hello, " + $name);
+    @ReturnBack("Hello, " + $name);
 }
 
 @LifeStart(@RunFunc(Main, $payload))
@@ -76,7 +76,7 @@ Functions are overloaded by argument count:
 |---------|-------------|
 | `@SetCallBackName("name")` | Register function name |
 | `@GetEventInfo(data, path)` | Extractor — read data from source |
-| `@ReturnToBot(value)` | Return value |
+| `@ReturnBack(value)` | Return value |
 | `@Log(message)` | Print log |
 | `@RunFunc(name, ...args)` | Call function (recursive) |
 
@@ -184,9 +184,9 @@ while(cond) { break; continue; }
 ### Array Literals
 
 ```cchq
-@ReturnToBot(["name"=>"Alice", "age"=>25, "active"=>true]);
-@ReturnToBot(["a", "b", "c"]);    // auto-indexed
-@ReturnToBot([]);                 // empty
+@ReturnBack(["name"=>"Alice", "age"=>25, "active"=>true]);
+@ReturnBack(["a", "b", "c"]);    // auto-indexed
+@ReturnBack([]);                 // empty
 ```
 
 ### Recursion
@@ -195,9 +195,9 @@ while(cond) { break; continue; }
 @Regfunc<>Param:$x&{
     @SetCallBackName("Fact");
     if($x > 1) {
-        @ReturnToBot($x * @RunFunc(Fact, $x - 1));
+        @ReturnBack($x * @RunFunc(Fact, $x - 1));
     }
-    @ReturnToBot(1);
+    @ReturnBack(1);
 }
 @LifeStart(@RunFunc(Fact, 5))   // 120
 ```
@@ -217,12 +217,12 @@ Restart the current function body with a new argument:
     if($payload == "first") {
         @EventRestart("second");   // restart current function with "second"
     }
-    @ReturnToBot("done");
+    @ReturnBack("done");
 }
 @LifeStart(@RunFunc(Handler, $payload))
 // Input "first":
 //   1. Handler("first")   → payload=="first" → @EventRestart("second")
-//   2. Handler("second")  → payload!="first" → @ReturnToBot("done")
+//   2. Handler("second")  → payload!="first" → @ReturnBack("done")
 //   Returns "done"
 ```
 
@@ -343,7 +343,7 @@ def create_runtime(context: dict = {}) -> Runtime:
         }
     }
 
-    @ReturnToBot(["name"=>$name, "age"=>$age, "status"=>$status, "sum"=>$sum]);
+    @ReturnBack(["name"=>$name, "age"=>$age, "status"=>$status, "sum"=>$sum]);
 }
 @LifeStart(@RunFunc(Process, $payload))
 ```

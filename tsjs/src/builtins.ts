@@ -62,8 +62,8 @@ export function registerBuiltins(env: Environment): void {
     return current;
   });
 
-  // @ReturnToBot
-  env.registerControl('ReturnToBot', function(value: any) {
+  // @ReturnBack
+  env.registerControl('ReturnBack', function(value: any) {
     return new ControlSignal('return', value);
   });
 

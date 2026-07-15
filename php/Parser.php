@@ -213,7 +213,7 @@ class Parser {
             return new CallNode($name, $args);
         }
     
-        // 其他表达式（如 @ReturnToBot 等）
+        // 其他表达式（如 @ReturnBack 等）
         if ($token['type'] === 'CONTROL') {
             $expr = $this->parseExpression();
             $this->match('SYMBOL', ';') || $this->match('SYMBOL', '&');

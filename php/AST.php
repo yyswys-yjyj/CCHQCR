@@ -219,7 +219,7 @@ class ContinueNode extends ASTNode {
     }
 }
 
-// Return 节点（对应 @ReturnToBot）
+// Return 节点（对应 @ReturnBack）
 class ReturnNode extends ASTNode {
     public $expr;
     public function __construct($expr) {
