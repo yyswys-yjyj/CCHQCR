@@ -13,9 +13,20 @@ CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三�
 ### 1. 从GitHub获取
 克隆本仓库提取你需要的版本
 
-### 2. 通过npm部署（仅ts/js适用）
+### 2. 通过npm部署（ts/js）
 ```bash
 npm i cchqcr-runtime --registry=https://www.serveryyswys.top/download/source/npm/
+```
+
+### 3. 通过composer部署（php）
+```bash
+composer config repositories.serveryyswys composer https://www.serveryyswys.top/download/source/composer
+composer require serveryyswys/cchqcr-runtime
+```
+
+### 4. 通过pip部署（python）
+```bash
+pip install cchqcr-runtime --index-url https://www.serveryyswys.top/download/source/pypi/simple/
 ```
 
 ---
