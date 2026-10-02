@@ -9,6 +9,15 @@
 **CCHQCode** 是一种轻量级、嵌入式脚本语言，专为事件驱动的业务逻辑场景设计。  
 CCHQCode Runtime 提供了 **PHP**、**TypeScript/JavaScript**、**Python** 三版本实现，可直接嵌入到你的项目中。
 
+## 安装
+### 1. 从GitHub获取
+克隆本仓库或下载可用的发行版即可
+
+### 2. 通过npm部署
+```bash
+npm i cchqcr-runtime --registry=https://www.serveryyswys.top/download/source/npm/
+```
+
 ---
 
 ## 目录
